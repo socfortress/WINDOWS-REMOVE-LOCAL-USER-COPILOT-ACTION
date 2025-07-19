@@ -1,10 +1,10 @@
-# PowerShell Active Response Template
+# PowerShell Remove Local User Template
 
 This repository serves as a template for creating PowerShell-based active response scripts for security automation and incident response. The template provides a standardized structure and common functions to ensure consistent logging, error handling, and execution flow across all active response scripts.
 
 ## Overview
 
-The `automation-template.ps1` file is the foundation for all PowerShell active response scripts. It provides a robust framework with built-in logging, error handling, and standardized output formatting suitable for integration with security orchestration platforms, SIEM systems, and incident response workflows.
+The `Remove-LocalUser.ps1` file is the foundation for PowerShell active response scripts that remove a specified local user account from a Windows system. It provides a robust framework with built-in logging, error handling, and standardized output formatting suitable for integration with security orchestration platforms, SIEM systems, and incident response workflows.
 
 ## Template Structure
 
@@ -22,28 +22,28 @@ The template includes the following essential components:
 
 ### Command Line Execution
 ```powershell
-.\automation-template.ps1 [-MaxWaitSeconds <int>] [-LogPath <string>] [-ARLog <string>]
+.\Remove-LocalUser.ps1 -TargetUser <string> [-LogPath <string>] [-ARLog <string>]
 ```
 
 ### Parameters
 
-| Parameter | Type | Default Value | Description |
-|-----------|------|---------------|-------------|
-| `MaxWaitSeconds` | int | 300 | Maximum execution time in seconds before timeout |
-| `LogPath` | string | `$env:TEMP\Generic-Automation.log` | Path for detailed execution logs |
-| `ARLog` | string | `C:\Program Files (x86)\ossec-agent\active-response\active-responses.log` | Path for active response JSON output |
+| Parameter     | Type   | Default Value                                                    | Description                                  |
+|---------------|--------|------------------------------------------------------------------|----------------------------------------------|
+| `TargetUser`  | string | (mandatory)                                                      | Name of the local user account to remove     |
+| `LogPath`     | string | `$env:TEMP\RemoveLocalUser-script.log`                           | Path for execution logs                      |
+| `ARLog`       | string | `C:\Program Files (x86)\ossec-agent\active-response\active-responses.log` | Path for active response JSON output         |
 
 ### Example Invocations
 
 ```powershell
-# Basic execution with default parameters
-.\automation-template.ps1
+# Remove a local user
+.\Remove-LocalUser.ps1 -TargetUser "baduser"
 
-# Custom timeout and log paths
-.\automation-template.ps1 -MaxWaitSeconds 600 -LogPath "C:\Logs\my-script.log"
+# Custom log path
+.\Remove-LocalUser.ps1 -TargetUser "baduser" -LogPath "C:\Logs\RemoveLocalUser.log"
 
 # Integration with OSSEC/Wazuh active response
-.\automation-template.ps1 -ARLog "C:\ossec\active-responses.log"
+.\Remove-LocalUser.ps1 -TargetUser "baduser" -ARLog "C:\ossec\active-responses.log"
 ```
 
 ## Template Functions
@@ -63,8 +63,8 @@ The template includes the following essential components:
 
 **Usage**:
 ```powershell
-Write-Log "Process started successfully" 'INFO'
-Write-Log "Configuration file not found" 'WARN'
+Write-Log "User 'baduser' has been removed." 'INFO'
+Write-Log "Refusing to delete protected system account 'Administrator'" 'ERROR'
 Write-Log "Critical error occurred" 'ERROR'
 Write-Log "Debug information" 'DEBUG'
 ```
@@ -92,9 +92,8 @@ Write-Log "Debug information" 'DEBUG'
 
 ### 2. Execution Phase
 - Script start logging with timestamp
-- Main action logic execution (customizable section)
+- Main action logic execution (remove local user, skip protected accounts)
 - Real-time logging of operations
-- Progress monitoring and timeout handling
 
 ### 3. Completion Phase
 - JSON result formatting and output
@@ -115,12 +114,11 @@ All scripts output standardized JSON responses to the active response log:
 ### Success Response
 ```json
 {
-  "timestamp": "2025-07-18T10:30:45.123Z",
   "host": "HOSTNAME",
-  "action": "script_action_name",
-  "status": "success",
-  "result": "Action completed successfully",
-  "data": {}
+  "timestamp": "2025-07-18T10:30:45.123Z",
+  "action": "remove_local_user",
+  "user": "baduser",
+  "status": "removed"
 }
 ```
 
@@ -129,16 +127,17 @@ All scripts output standardized JSON responses to the active response log:
 {
   "timestamp": "2025-07-18T10:30:45.123Z",
   "host": "HOSTNAME",
-  "action": "generic_error",
+  "action": "remove_local_user",
+  "target": "Administrator",
   "status": "error",
-  "error": "Detailed error message"
+  "error": "Refusing to delete protected system account 'Administrator'"
 }
 ```
 
 ## Implementation Guidelines
 
 ### 1. Customizing the Template
-1. Copy `automation-template.ps1` to your new script name
+1. Copy `Remove-LocalUser.ps1` to your new script name
 2. Replace the action logic section between the comment markers
 3. Update the action name in the JSON output
 4. Add any additional parameters as needed
@@ -148,16 +147,13 @@ All scripts output standardized JSON responses to the active response log:
 - Always use the provided logging functions
 - Implement proper error handling for all operations
 - Include meaningful progress messages
-- Test timeout scenarios
 - Validate all input parameters
 - Document any additional functions or parameters
 
 ### 3. Integration Considerations
 - Ensure proper file permissions for log paths
-- Configure appropriate timeout values for your use case
 - Test script execution in target environments
 - Validate JSON output format compatibility
-- Consider network connectivity requirements
 
 ## Security Considerations
 
@@ -170,15 +166,14 @@ All scripts output standardized JSON responses to the active response log:
 ## Troubleshooting
 
 ### Common Issues
-1. **Permission Errors**: Ensure script has write access to log paths
-2. **Timeout Issues**: Adjust `MaxWaitSeconds` parameter for long-running operations
-3. **Log Rotation**: Check disk space and file permissions for log directory
-4. **JSON Format**: Validate output against expected schema
+1. **Permission Errors**: Ensure script has write access to log paths and is run as Administrator for user removal
+2. **Log Rotation**: Check disk space and file permissions for log directory
+3. **JSON Format**: Validate output against expected schema
 
 ### Debug Mode
 Enable verbose logging by running with `-Verbose` parameter:
 ```powershell
-.\automation-template.ps1 -Verbose
+.\Remove-LocalUser.ps1 -TargetUser "baduser" -Verbose
 ```
 
 ## Contributing
@@ -239,13 +234,13 @@ Invoke-WebRequest -Uri "https://github.com/{owner}/{repo}/releases/download/v1.0
 #### Option 2: Direct Download
 ```powershell
 # Download script directly
-Invoke-WebRequest -Uri "https://github.com/{owner}/{repo}/releases/download/v1.0.0/script-name.ps1" -OutFile "script-name.ps1"
+Invoke-WebRequest -Uri "https://github.com/{owner}/{repo}/releases/download/v1.0.0/Remove-LocalUser.ps1" -OutFile "Remove-LocalUser.ps1"
 ```
 
 #### Option 3: One-liner Execution
 ```powershell
 # Execute directly from URL (use with caution)
-Invoke-WebRequest -Uri "https://github.com/{owner}/{repo}/releases/download/v1.0.0/script-name.ps1" | Invoke-Expression
+Invoke-WebRequest -Uri "https://github.com/{owner}/{repo}/releases/download/v1.0.0/Remove-LocalUser.ps1" | Invoke-Expression
 ```
 
 ### Production Deployment
@@ -276,4 +271,4 @@ However, for environments requiring additional security or deployment simplifica
 
 ## License
 
-This template is provided as-is for security automation and incident response purposes.
+This template is provided as-is for security automation and incident
