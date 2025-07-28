@@ -65,6 +65,7 @@ try {
     action = "remove_local_user"
     user = $TargetUser
     status = "removed"
+    copilot_soar = $true
   }
   $result | ConvertTo-Json -Compress | Out-File -FilePath $ARLog -Encoding ascii -Width 2000
   Write-Log "Result JSON logged to $ARLog" 'INFO'
@@ -77,6 +78,7 @@ try {
     target = $TargetUser
     status = 'error'
     error = $_.Exception.Message
+    copilot_soar = $true
   }
   $errorObj | ConvertTo-Json -Compress | Out-File -FilePath $ARLog -Append -Encoding ascii -Width 2000
 } finally {
