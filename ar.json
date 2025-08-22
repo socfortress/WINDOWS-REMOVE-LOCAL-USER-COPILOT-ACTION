@@ -1,0 +1,33 @@
+{
+  "active_response_name": "WINDOWS-REMOVE-LOCAL-USER-ACTIVERESPONSE",
+  "description": "Removes a specified local user account from the Windows system, excluding protected accounts such as Administrator, DefaultAccount, Guest, and WDAGUtilityAccount. Produces a JSON log with status and error details if any.",
+  "technology": "Windows",
+  "icon": "windows",
+  "script_parameters": [
+    {
+      "name": "TargetUser",
+      "type": "string",
+      "required": true,
+      "description": "The local user account to be removed from the system.",
+      "default": null
+    },
+    {
+      "name": "LogPath",
+      "type": "string",
+      "required": false,
+      "description": "Path to the rotating human-readable script log.",
+      "default": "%TEMP%/RemoveLocalUser-script.log"
+    },
+    {
+      "name": "ARLog",
+      "type": "string",
+      "required": false,
+      "description": "Active Response JSON log path. Overwrites existing content.",
+      "default": "C:\\Program Files (x86)\\ossec-agent\\active-response\\active-responses.log"
+    }
+  ],
+  "repo_url": "https://github.com/socfortress/WINDOWS-REMOVE-LOCAL-USER-ACTIVERESPONSE",
+  "script_name": "Remove-LocalUser.ps1",
+  "version": "1.0.0",
+  "last_updated": "2025-08-22T00:00:00Z"
+}
