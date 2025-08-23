@@ -1,5 +1,5 @@
 {
-  "copilot_action_name": "WINDOWS-REMOVE-LOCAL-USER-ACTIVERESPONSE",
+  "copilot_action_name": "WINDOWS-REMOVE-LOCAL-USER-COPILOT-ACTION",
   "description": "Removes a specified local user account from the Windows system, excluding protected accounts such as Administrator, DefaultAccount, Guest, and WDAGUtilityAccount. Produces a JSON log with status and error details if any.",
   "technology": "Windows",
   "icon": "windows",
