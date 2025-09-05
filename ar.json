@@ -9,7 +9,8 @@
       "type": "string",
       "required": true,
       "description": "The local user account to be removed from the system.",
-      "default": null
+      "default": null,
+      "arg_position" : "1"
     },
     {
       "name": "LogPath",
