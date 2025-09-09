@@ -1,6 +1,6 @@
 {
   "copilot_action_name": "WINDOWS-REMOVE-LOCAL-USER-COPILOT-ACTION",
-  "description": "Removes a specified local user account from the Windows system, excluding protected accounts such as Administrator, DefaultAccount, Guest, and WDAGUtilityAccount. Produces a JSON log with status and error details if any.",
+  "description": "Removes a specified local user account while protecting built-in accounts (Administrator, DefaultAccount, Guest, WDAGUtilityAccount). Emits NDJSON with verification, pre-checks, action result, post-removal verification, and a run summary.",
   "technology": "Windows",
   "icon": "windows",
   "script_parameters": [
@@ -8,27 +8,12 @@
       "name": "TargetUser",
       "type": "string",
       "required": true,
-      "description": "The local user account to be removed from the system.",
-      "default": null,
-      "arg_position" : "1"
-    },
-    {
-      "name": "LogPath",
-      "type": "string",
-      "required": false,
-      "description": "Path to the rotating human-readable script log.",
-      "default": "%TEMP%/RemoveLocalUser-script.log"
-    },
-    {
-      "name": "ARLog",
-      "type": "string",
-      "required": false,
-      "description": "Active Response JSON log path. Overwrites existing content.",
-      "default": "C:\\Program Files (x86)\\ossec-agent\\active-response\\active-responses.log"
+      "description": "Local account name to remove.",
+      "arg_position": "1"
     }
   ],
-  "repo_url": "https://raw.githubusercontent.com/socfortress/WINDOWS-REMOVE-LOCAL-USER-COPILOT-ACTION/refs/heads/main",
-  "script_name": "Remove-LocalUser.ps1",
+  "repo_url": "https://raw.githubusercontent.com/socfortress/WINDOWS-REMOVE-LOCAL-USER-COPILOT-ACTION/refs/heads/main/Remove-Local-User.ps1",
+  "script_name": "Remove-Local-User.ps1",
   "version": "1.0.0",
-  "last_updated": "2025-08-22T00:00:00Z"
+  "last_updated": "2025-09-09T00:00:00Z"
 }
