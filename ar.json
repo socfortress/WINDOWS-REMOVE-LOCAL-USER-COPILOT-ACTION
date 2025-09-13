@@ -12,7 +12,7 @@
       "arg_position": "1"
     }
   ],
-  "repo_url": "https://raw.githubusercontent.com/socfortress/WINDOWS-REMOVE-LOCAL-USER-COPILOT-ACTION/refs/heads/main/Remove-Local-User.ps1",
+  "repo_url": "https://raw.githubusercontent.com/socfortress/WINDOWS-REMOVE-LOCAL-USER-COPILOT-ACTION/refs/heads/main/Remove-LocalUser.ps1",
   "script_name": "Remove-Local-User.ps1",
   "version": "1.0.0",
   "last_updated": "2025-09-09T00:00:00Z"
